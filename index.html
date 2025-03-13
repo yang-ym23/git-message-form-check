@@ -31,7 +31,7 @@
             color: #333;
         }
 
-        select, textarea {
+        textarea {
             width: 100%;
             padding: 8px;
             border: 1px solid #ddd;
@@ -39,7 +39,7 @@
             box-sizing: border-box;
         }
 
-        .flags {
+        .flags, .regex-options {
             margin: 10px 0;
         }
 
@@ -81,17 +81,15 @@
     <div class="container">
         <h1>正则表达式测试工具</h1>
         
-        <div class="input-group">
-            <label for="regex-select">选择正则表达式：</label>
-            <select id="regex-select">
-                <option value="^[a-zA-Z0-9]+$">仅字母和数字</option>
-                <option value="^\\d{4}-\\d{2}-\\d{2}$">日期格式 YYYY-MM-DD</option>
-                <option value="^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$">电子邮件格式</option>
-            </select>
+        <div class="regex-options">
+            <label>选择正则表达式：</label>
+            <label><input type="radio" name="regex" class="regex-radio" value="^[a-zA-Z0-9]+$"> 仅字母和数字</label>
+            <label><input type="radio" name="regex" class="regex-radio" value="^\d{4}-\d{2}-\d{2}$"> 日期格式 YYYY-MM-DD</label>
+            <label><input type="radio" name="regex" class="regex-radio" value="^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"> 电子邮件格式</label>
         </div>
 
         <div class="flags">
-            <label><input type="checkbox" id="flag-i">忽略大小写</label>
+            <label><input type="checkbox" id="flag-i"> 忽略大小写</label>
         </div>
 
         <div class="input-group">
@@ -106,25 +104,32 @@
 
     <script>
         function testRegex() {
-            const regexValue = document.getElementById('regex-select').value;
+            const selectedRegex = document.querySelector('.regex-radio:checked');
             const testText = document.getElementById('test-input').value;
             const resultDiv = document.getElementById('result');
             
             resultDiv.className = 'result';
             resultDiv.style.display = 'none';
             
+            if (!selectedRegex) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '⚠️ 请选择一个正则表达式';
+                resultDiv.style.display = 'block';
+                return;
+            }
+
             const flags = document.getElementById('flag-i').checked ? 'i' : '';
 
             try {
-                const regex = new RegExp(regexValue, flags);
+                const regex = new RegExp(selectedRegex.value, flags);
                 const isMatch = regex.test(testText);
 
                 if (isMatch) {
                     resultDiv.className = 'result success';
-                    resultDiv.innerHTML = `✅ 完全匹配成功！`;
+                    resultDiv.innerHTML = '✅ 匹配成功！';
                 } else {
                     resultDiv.className = 'result error';
-                    resultDiv.innerHTML = '❌ 没有找到完全匹配项';
+                    resultDiv.innerHTML = '❌ 没有找到匹配项';
                 }
             } catch (e) {
                 resultDiv.className = 'result error';
