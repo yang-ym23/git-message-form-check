@@ -31,7 +31,7 @@
             color: #333;
         }
 
-        input[type="text"], textarea {
+        select, textarea {
             width: 100%;
             padding: 8px;
             border: 1px solid #ddd;
@@ -75,10 +75,6 @@
             border: 1px solid #f5c6cb;
             color: #721c24;
         }
-
-        .matches {
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
@@ -86,14 +82,15 @@
         <h1>正则表达式测试工具</h1>
         
         <div class="input-group">
-            <label for="regex-input">正则表达式：</label>
-            <input type="text" id="regex-input" placeholder="例如：^[a-zA-Z0-9]+$">
+            <label for="regex-select">选择正则表达式：</label>
+            <select id="regex-select">
+                <option value="^[a-zA-Z0-9]+$">仅字母和数字</option>
+                <option value="^\\d{4}-\\d{2}-\\d{2}$">日期格式 YYYY-MM-DD</option>
+                <option value="^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$">电子邮件格式</option>
+            </select>
         </div>
 
         <div class="flags">
-            <label>匹配模式：</label>
-            <label><input type="checkbox" id="flag-i"> i (忽略大小写)</label>
-            <label><input type="checkbox" id="flag-g"> g (全局匹配)</label>
             <label><input type="checkbox" id="flag-m"> m (多行模式)</label>
         </div>
 
@@ -105,45 +102,29 @@
         <button onclick="testRegex()">测试匹配</button>
 
         <div id="result" class="result"></div>
-        <div id="matches" class="matches"></div>
     </div>
 
     <script>
         function testRegex() {
-            const regexInput = document.getElementById('regex-input').value;
+            const regexValue = document.getElementById('regex-select').value;
             const testText = document.getElementById('test-input').value;
             const resultDiv = document.getElementById('result');
-            const matchesDiv = document.getElementById('matches');
             
-            // 清空之前的结果
             resultDiv.className = 'result';
             resultDiv.style.display = 'none';
-            matchesDiv.innerHTML = '';
-
-            // 获取匹配模式
-            const flags = [
-                document.getElementById('flag-i').checked ? 'i' : '',
-                document.getElementById('flag-g').checked ? 'g' : '',
-                document.getElementById('flag-m').checked ? 'm' : ''
-            ].join('');
+            
+            const flags = document.getElementById('flag-m').checked ? 'm' : '';
 
             try {
-                const regex = new RegExp(regexInput, flags);
-                const matches = testText.match(regex);
+                const regex = new RegExp(`^(${regexValue})$`, flags);
+                const isMatch = regex.test(testText);
 
-                if (matches) {
+                if (isMatch) {
                     resultDiv.className = 'result success';
-                    resultDiv.innerHTML = `✅ 匹配成功！找到 ${matches.length} 个匹配项`;
-                    
-                    // 显示匹配详情
-                    let matchesHtml = '<h3>匹配详情：</h3>';
-                    matches.forEach((match, index) => {
-                        matchesHtml += `<div>${index + 1}. ${escapeHtml(match)}</div>`;
-                    });
-                    matchesDiv.innerHTML = matchesHtml;
+                    resultDiv.innerHTML = `✅ 完全匹配成功！`;
                 } else {
                     resultDiv.className = 'result error';
-                    resultDiv.innerHTML = '❌ 没有找到匹配项';
+                    resultDiv.innerHTML = '❌ 没有找到完全匹配项';
                 }
             } catch (e) {
                 resultDiv.className = 'result error';
@@ -151,16 +132,6 @@
             }
             
             resultDiv.style.display = 'block';
-        }
-
-        // 防止XSS攻击的简单转义
-        function escapeHtml(unsafe) {
-            return unsafe.toString()
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
         }
     </script>
 </body>
