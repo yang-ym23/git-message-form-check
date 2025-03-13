@@ -83,9 +83,9 @@
         
         <div class="regex-options">
             <label>选择正则表达式：</label>
-            <label><input type="radio" name="regex" class="regex-radio" value="^[a-zA-Z0-9]+$"> 仅字母和数字</label>
-            <label><input type="radio" name="regex" class="regex-radio" value="^\d{4}-\d{2}-\d{2}$"> 日期格式 YYYY-MM-DD</label>
-            <label><input type="radio" name="regex" class="regex-radio" value="^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"> 电子邮件格式</label>
+            <label><input type="radio" name="regex" class="regex-radio" value="^(add|chore|docs|feat|fix|other|perf|refactor|res|revert|style|test)(\([\w\-]+\))?:\s.{1,100}(\n\n.{1,1000})?(\n\n(Closes|Fixes|Resolves)\s#\d+)?$"> commit 规范</label>
+            <label><input type="radio" name="regex" class="regex-radio" value="^merge (branch '[\w\-/]+' into [\w\-/]+|pull request #\d+ from [\w\-/]+)$"> merge 规范</label>
+            <label><input type="radio" name="regex" class="regex-radio" value="^(master|dev|(feat|fix)\/[\w\-_]+)$"> branch 规范</label>
         </div>
 
         <div class="flags">
