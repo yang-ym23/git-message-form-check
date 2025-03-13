@@ -91,7 +91,7 @@
         </div>
 
         <div class="flags">
-            <label><input type="checkbox" id="flag-m"> m (多行模式)</label>
+            <label><input type="checkbox" id="flag-i">忽略大小写</label>
         </div>
 
         <div class="input-group">
@@ -113,10 +113,10 @@
             resultDiv.className = 'result';
             resultDiv.style.display = 'none';
             
-            const flags = document.getElementById('flag-m').checked ? 'm' : '';
+            const flags = document.getElementById('flag-i').checked ? 'i' : '';
 
             try {
-                const regex = new RegExp(`^(${regexValue})$`, flags);
+                const regex = new RegExp(regexValue, flags);
                 const isMatch = regex.test(testText);
 
                 if (isMatch) {
