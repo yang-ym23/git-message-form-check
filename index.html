@@ -84,7 +84,7 @@
         <div class="regex-options">
             <label>选择正则表达式：</label>
             <label><input type="radio" name="regex" class="regex-radio" value="^(add|chore|docs|feat|fix|other|perf|refactor|res|revert|style|test)(\([\w\-]+\))?:\s.{1,100}(\n\n.{1,1000})?(\n\n(Closes|Fixes|Resolves)\s#\d+)?$"> commit 规范</label>
-            <label><input type="radio" name="regex" class="regex-radio" value="^merge (branch '[\w\-/]+' into [\w\-/]+|pull request #\d+ from [\w\-/]+)$"> merge 规范</label>
+            <label><input type="radio" name="regex" class="regex-radio" value="^merge (branch '[\w\-/]+' into '[\w\-/]+'|pull request #\d+ from '[\w\-/]+')$"> merge 规范</label>
             <label><input type="radio" name="regex" class="regex-radio" value="^(master|dev|(feat|fix)\/[\w\-_]+)$"> branch 规范</label>
         </div>
 
@@ -129,7 +129,7 @@
                     resultDiv.innerHTML = '✅ 匹配成功！';
                 } else {
                     resultDiv.className = 'result error';
-                    resultDiv.innerHTML = '❌ 没有找到匹配项';
+                    resultDiv.innerHTML = '❌ 匹配失败！请检查~';
                 }
             } catch (e) {
                 resultDiv.className = 'result error';
